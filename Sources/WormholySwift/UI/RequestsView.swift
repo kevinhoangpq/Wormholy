@@ -26,7 +26,7 @@ internal struct RequestsView: View {
     }
     
     var body: some View {
-        NavigationStack {
+        NavigationView {
             VStack(spacing: 0) {
                 SearchBar(text: $searchText, onTextChanged: filterRequests)
                 
@@ -45,19 +45,20 @@ internal struct RequestsView: View {
                 }
                 .animation(.bouncy, value: filteredRequests)
                 .listStyle(PlainListStyle())
-                .navigationTitle("Requests")
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button("More") {
+                .navigationBarTitle("Requests")
+                .navigationBarItems(
+                    leading: Button(action: {
+                        presentationMode.wrappedValue.dismiss()
+                    }) {
+                        Text("Done")
+                    },
+                    trailing:
+                        Button(action: {
                             isActionSheetPresented = true
+                        }) {
+                            Text("More")
                         }
-                    }
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button("Done") {
-                            presentationMode.wrappedValue.dismiss()
-                        }
-                    }
-                }
+                )
                 .actionSheet(isPresented: $isActionSheetPresented) {
                     ActionSheet(title: Text("Wormholy"), message: Text("Choose an option"), buttons: [
                         .default(Text("Clear")) {

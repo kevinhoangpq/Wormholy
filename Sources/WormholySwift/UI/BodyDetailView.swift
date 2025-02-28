@@ -59,7 +59,7 @@ internal struct BodyDetailView: View {
             .padding()
             .background(Color(UIColor.systemBackground).opacity(0.9))
         }
-        .navigationTitle("Response Body")
+        .navigationBarTitle("Response Body")
         .navigationBarItems(trailing: Button(action: {
             isShareSheetPresented = true
         }) {

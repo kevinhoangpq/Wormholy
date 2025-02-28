@@ -104,14 +104,15 @@ struct StatsView: View {
                     }
                 }
             }
-            .navigationTitle("Request Stats")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Dismiss") {
+            .navigationBarTitle("Request Stats")
+            .navigationBarItems(
+                trailing:
+                    Button(action: {
                         presentationMode.wrappedValue.dismiss()
+                    }) {
+                        Text("Done")
                     }
-                }
-            }
+            )
         }
     }
     

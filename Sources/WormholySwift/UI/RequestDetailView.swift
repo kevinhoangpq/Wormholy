@@ -14,9 +14,10 @@ internal struct RequestDetailView: View {
     @State private var isActionSheetPresented = false
     @State private var isShareSheetPresented = false
     @State private var selectedExportOption: RequestResponseExportOption = .flat
+    @Environment(\.presentationMode) var presentationMode
 
     var body: some View {
-        NavigationStack {
+        NavigationView {
             List {
                 
                 // Overview Section
@@ -82,16 +83,15 @@ internal struct RequestDetailView: View {
                     }
                 }
             }
-            .textSelection(.enabled)
             .listStyle(GroupedListStyle())
-            .navigationTitle(URL(string: request.url)?.path ?? "Request Detail")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("More") {
-                        isActionSheetPresented = true
-                    }
+            .navigationBarTitle(URL(string: request.url)?.path ?? "Request Detail")
+            .navigationBarItems(trailing:
+                Button(action: {
+                    isActionSheetPresented = true
+                }) {
+                    Text("More")
                 }
-            }
+            )
             .actionSheet(isPresented: $isActionSheetPresented) {
                 ActionSheet(title: Text("Wormholy"), message: Text("Choose an option"), buttons: [
                     .default(Text("Share")) {
