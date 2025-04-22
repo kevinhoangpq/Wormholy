@@ -103,6 +103,19 @@ public class Wormholy: NSObject
         sessionConfiguration.protocolClasses = urlProtocolClasses
     }
     
+    static func topMostViewController(controller: UIViewController? = UIApplication.shared.windows.first?.rootViewController) -> UIViewController? {
+        if let nav = controller as? UINavigationController {
+            return topMostViewController(controller: nav.visibleViewController)
+        }
+        if let tab = controller as? UITabBarController {
+            return topMostViewController(controller: tab.selectedViewController)
+        }
+        if let presented = controller?.presentedViewController {
+            return topMostViewController(controller: presented)
+        }
+        return controller
+    }
+    
     // MARK: - Navigation
     static func presentWormholyFlow() {
         // Check if RequestsView is already presented
@@ -116,7 +129,7 @@ public class Wormholy: NSObject
         let requestsView = RequestsView()
         let hostingController = UIHostingController(rootView: requestsView)
         hostingController.modalPresentationStyle = .fullScreen
-        UIApplication.shared.windows.first?.rootViewController?.present(hostingController, animated: true, completion: nil)
+        topMostViewController()?.present(hostingController, animated: true)
     }
     
     @objc public static var shakeEnabled: Bool = {
