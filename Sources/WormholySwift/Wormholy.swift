@@ -54,6 +54,8 @@ public class Wormholy: NSObject
     // Flag to determine if Wormholy is enabled
     internal static var isEnabled: Bool = true
     
+    static var isPresenting: Bool = false
+    
     /// Method to initialize Wormholy
     @objc public static func swiftyLoad() {
         NotificationCenter.default.addObserver(forName: fireWormholy, object: nil, queue: nil) { (notification) in
@@ -118,9 +120,12 @@ public class Wormholy: NSObject
     
     // MARK: - Navigation
     static func presentWormholyFlow() {
+        guard !isPresenting else { return }
+        isPresenting = true
+        
         // Check if RequestsView is already presented
-        if let rootViewController = UIApplication.shared.windows.first?.rootViewController,
-           let hostingController = rootViewController.presentedViewController as? UIHostingController<RequestsView> {
+        if let topVC = topMostViewController(),
+           let hostingController = topVC.presentedViewController as? UIHostingController<RequestsView> {
             // RequestsView is already presented, do nothing
             return
         }
@@ -129,7 +134,9 @@ public class Wormholy: NSObject
         let requestsView = RequestsView()
         let hostingController = UIHostingController(rootView: requestsView)
         hostingController.modalPresentationStyle = .fullScreen
-        topMostViewController()?.present(hostingController, animated: true)
+        topMostViewController()?.present(hostingController, animated: true) {
+            isPresenting = false
+        }
     }
     
     @objc public static var shakeEnabled: Bool = {
